@@ -21,7 +21,7 @@ const Home: NextPage = ({posts} : Props) => {
          {posts.map(post =>(
             <Link key={post._id} href={`${post.slug.current}`}>
               <div className="overflow-hidden rounded-lg border group cursor-pointer">
-               <img className="w-full object-cover group-hover:scale-105 transition-transform duration-700 ease-in-out" src={urlFor(post.mainImage).url()} alt="" />
+               <img className="w-full object-cover group-hover:scale-105 transition-transform duration-00 ease-in-out" src={urlFor(post.mainImage).url()} alt="" />
                <div className="flex justify-between items-center p-2 ">
                    <div>
                      <p className="font-bold text-2xl uppercase">{post.title}</p>
@@ -45,7 +45,9 @@ export async function getServerSideProps(){
   _createdAt,       
   title,
   description,
-  slug,
+  slug{
+    current
+  },
   body,
   mainImage,
   author ->{
