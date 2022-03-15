@@ -1,9 +1,9 @@
 import { GetStaticProps } from 'next'
-import React from 'react'
+
 import Header from '../../components/Header'
 import {sanityClient, urlFor} from '../../sanity'
 import {Post} from  '../../typings'
-
+import PortableText from "react-portable-text"
 interface Props { 
      post : Post
 }
@@ -21,6 +21,18 @@ function Post({post} : Props) {
                 </div>
                 
              </div>
+             <PortableText
+              content={post.body}
+              projectId={process.env.SANITY_PROJECT_ID!}
+              dataset={process.env.SANITY_DATASET!}
+              serializers={{
+                h1: (props : any) => <h1 className="font-semibold text-5xl my-3" {...props} />,
+                h2: (props : any) => <h2 className="font-semibold text-3xl my-3" {...props} />,
+                li: ({ children } : any) => <li className="ml-5">{children}</li>,
+                link:({ href,children } : any) => <a href={href} className="text-blue-400 underline">{children}</a>,
+              
+              }}
+          />
          </article>
   </main>
   </>
@@ -57,7 +69,13 @@ export const getStaticProps : GetStaticProps  = async ({params}) =>{
   slug{ 
     current
   },
-  body,
+  body[]{
+    ..., 
+    asset->{
+      ...,
+      "_key": _id
+    }
+  },
   mainImage,
   author ->{
    name,
