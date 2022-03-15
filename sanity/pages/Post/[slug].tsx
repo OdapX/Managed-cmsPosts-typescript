@@ -1,6 +1,7 @@
 import { GetStaticProps } from 'next'
 import React from 'react'
-import {sanityClient} from '../../sanity'
+import Header from '../../components/Header'
+import {sanityClient, urlFor} from '../../sanity'
 import {Post} from  '../../typings'
 
 interface Props { 
@@ -8,7 +9,21 @@ interface Props {
 }
 
 function Post({post} : Props) {
-  return <div className="text-black">{post.title}</div>
+  return <> <Header/> <main>
+         <img src={urlFor(post.mainImage).url()} alt="" className="block w-full mt-7 object-cover max-h-[300px]" />
+         <article className="max-w-7xl mx-auto mt-7 space-y-3">
+             <h1 className="font-sansserif text-5xl">{post.title}</h1>
+             <div className="pl-5 space-y-3">
+                <p className="text-3xl font-light">{post.description}</p>
+                <div className="flex items-center space-x-2">
+                <img  src={urlFor(post.author.image).url()} className="w-11 h-11 rounded-full"/> 
+                <p>Written by {post.author.name} - Published at {new Date(post._createdAt).toLocaleString()}</p>
+                </div>
+                
+             </div>
+         </article>
+  </main>
+  </>
 }
 
 export default Post
@@ -19,14 +34,15 @@ export async function getStaticPaths() {
   slug,
 }`
   const posts  = await sanityClient.fetch(query)
-   
-  return {
-      paths : posts.map((post : Post)=>({
+  const paths = posts.map((post : Post)=>({
            params : {
              slug : post.slug.current
            }
-      })),
-      fallback:false
+      }))
+      console.log(paths);
+  return {
+      paths ,
+      fallback:false,
   }
 }
 
@@ -52,10 +68,16 @@ export const getStaticProps : GetStaticProps  = async ({params}) =>{
  `
  const Groqparams = {slug: params?.slug}
  const post = await sanityClient.fetch(query,Groqparams)
-console.log(post)
+ 
+ if(!post){
+   return{
+     notFound:true,
+   }
+ }
  return {
     props: {
       post
-    }
+    },
+    revalidate : 60*60*24,
  }
 }
