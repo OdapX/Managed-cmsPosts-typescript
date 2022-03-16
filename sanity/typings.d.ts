@@ -15,6 +15,7 @@ export interface Post {
 
     
    };
+   messages : [Message];
    description:string;
    mainImage:{
        asset : {
@@ -22,4 +23,9 @@ export interface Post {
        };
    };
    body:[object];
+}
+
+export interface Message{
+    name:string;
+    message:string;
 }

@@ -30,7 +30,7 @@ const Home: NextPage = ({posts} : Props) => {
                    <img className="w-14 h-14 rounded-full " src={urlFor(post.author.image).url()} alt="" />
                </div>
                 </div>
-            </Link>
+          </Link>
          ))}
       </div>
     </>
