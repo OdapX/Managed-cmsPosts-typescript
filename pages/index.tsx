@@ -1,4 +1,4 @@
-import type { NextPage } from 'next'
+
 import Head from 'next/head'
 import Image from 'next/image'
 import Link from 'next/link'
@@ -11,10 +11,11 @@ interface Props {
   posts : [Post]
 }
 
-const Home: NextPage = ({posts} : Props) => {
+const Home= ({posts} : Props) => {
 
   return (
-    <> 
+    <>  
+    <div>dfdfdf</div>
       <Header/>
       <Banner/>
       <div className="max-w-7xl mx-auto mt-5 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
